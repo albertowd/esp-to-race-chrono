@@ -32,11 +32,6 @@
       uint8_t sensorCount;
 
       /**
-       * The last current measurements.
-       */
-      VL53L0X_RangingMeasurementData_t* measurements;
-
-      /**
        * Privated constructor to avoid calling.
        */
       PedalManager(const PedalManager &pedalManager) {}
@@ -59,8 +54,10 @@
        * Returns the last measurement for the 
        * required sensor.
        * @param sensorIndex Sensor A = 0, B = 1 & C = 2
+       * @param debug If it should debug measuremente informations.
+       * @return The value of the last measurement.
        */
-      uint16_t getMeasurement(const uint8_t sensorIndex) const;
+      uint16_t getMeasurement(const uint8_t sensorIndex, bool debug = false) const;
 
       /**
        * Method to setup all the sensors one at a time.

@@ -13,8 +13,7 @@ void loop() {
   digitalWrite(LED_BUILTIN, LOW);
   PerformanceManager::instance()->reset();
 
-  pedals.update(false);
-  Serial.printf("SensorA: %d mm\n", pedals.getMeasurement(0));
+  Serial.printf("SensorA: %d mm\n", pedals.getMeasurement(0, false));
 
   digitalWrite(LED_BUILTIN, HIGH);
   PerformanceManager::instance()->measure();
@@ -23,7 +22,6 @@ void loop() {
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
-  PerformanceManager::instance()->setTargetHz(33U);
   PerformanceManager::instance()->reset();
 
   Serial.begin(115200);

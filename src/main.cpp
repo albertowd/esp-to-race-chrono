@@ -13,7 +13,8 @@ void loop() {
   digitalWrite(LED_BUILTIN, LOW);
   PerformanceManager::instance()->reset();
 
-  Serial.printf("SensorA: %d mm\n", pedals.getMeasurement(0, false));
+  pedals.update(false);
+  Serial.printf("SensorA: %d %% - %d mm\n", pedals.getPedalPosition(0), pedals.getPedalDistance(0));
 
   digitalWrite(LED_BUILTIN, HIGH);
   PerformanceManager::instance()->measure();

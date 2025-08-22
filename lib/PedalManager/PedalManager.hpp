@@ -22,6 +22,16 @@
       Adafruit_VL53L0X* sensors;
 
       /**
+       * Each sensor dynamic max value.
+       */
+      uint16_t* values;
+
+      /**
+       * Each sensor last read value.
+       */
+      uint16_t* maxValues;
+
+      /**
        * Sensor pins (for each shut command, they must be digital).
        */
       uint8_t* pins;
@@ -54,10 +64,17 @@
        * Returns the last measurement for the 
        * required sensor.
        * @param sensorIndex Sensor A = 0, B = 1 & C = 2
-       * @param debug If it should debug measuremente informations.
        * @return The value of the last measurement.
        */
-      uint16_t getMeasurement(const uint8_t sensorIndex, bool debug = false) const;
+      uint16_t getPedalDistance(const uint8_t sensorIndex) const;
+
+      /**
+       * Returns the last measurement for the 
+       * required sensor divided by the max value.
+       * @param sensorIndex Sensor A = 0, B = 1 & C = 2
+       * @return The value of the last measurement.
+       */
+      uint16_t getPedalPosition(const uint8_t sensorIndex) const;
 
       /**
        * Method to setup all the sensors one at a time.
@@ -66,8 +83,9 @@
 
       /**
        * Method to update the measurement, as needed.
+       * @param debug If it should debug measuremente informations.
        */
-      void update(bool debug = false);
+      void update(const bool debug = false);
   };
 
 #endif // __PEDAL_MANAGER_HPP

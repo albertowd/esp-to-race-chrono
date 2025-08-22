@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "PerformanceManager.hpp"
 
 PerformanceManager PerformanceManager::singleton;
@@ -16,7 +17,9 @@ void PerformanceManager::measure(bool shouldDelay, bool debug) {
     Serial.printf("Performance: %lu Hz ~ %lu ms (%lu ms)\n", 1000 / this->elapsedMs, this->elapsedMs, this->targetMs);
   }
   if (this->targetMs > this->elapsedMs) {
-    delay(this->targetMs - this->elapsedMs);
+    delay(this->targetMs - this->elapsedMs + 1000);
+  } else {
+    delay(1000);
   }
 }
 

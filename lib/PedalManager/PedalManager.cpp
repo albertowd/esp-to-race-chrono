@@ -3,7 +3,7 @@
 PedalManager::PedalManager(const uint8_t shutA, const uint8_t shutB, const uint8_t shutC) {
   this->sensorCount = (shutA != 0 ? 1 : 0) + (shutB != 0 ? 1 : 0) + (shutC != 0 ? 1 : 0);
   this->measurements = new VL53L0X_RangingMeasurementData_t[sensorCount];
-  this->pins = new uint8[sensorCount];
+  this->pins = new uint8_t[sensorCount];
   this->sensors = new Adafruit_VL53L0X[sensorCount];
 }
 
@@ -14,8 +14,13 @@ PedalManager::~PedalManager() {
   delete[] this->sensors;
 }
 
-uint16_t PedalManager::getMeasurement(const uint8 pedalIndex) const {
-  return this->measurements[pedalIndex].RangeMilliMeter;
+uint16_t PedalManager::getMeasurement(const uint8_t pedalIndex) const {
+  VL53L0X_RangingMeasurementData_t measurement = this->measurements[pedalIndex];
+  if (measurement.RangeStatus != 0) {
+    return this->measurements[pedalIndex].RangeMilliMeter;
+  } else {
+    return 0U;
+  }
 }
 
 void PedalManager::setup() const {

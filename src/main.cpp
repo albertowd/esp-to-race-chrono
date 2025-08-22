@@ -13,8 +13,8 @@ void loop() {
   digitalWrite(LED_BUILTIN, LOW);
   PerformanceManager::instance()->reset();
 
-  pedals.update(true);
-  Serial.printf("SensorA: %d mm\n", pedals.getMeasurement(D5));
+  pedals.update(false);
+  Serial.printf("SensorA: %d mm\n", pedals.getMeasurement(0));
 
   digitalWrite(LED_BUILTIN, HIGH);
   PerformanceManager::instance()->measure();
@@ -32,6 +32,8 @@ void setup() {
   while (!Serial && serialTimeout > millis()) { delay(1); }
 
   pedals.setup();
+
+  delay(1000);
 
   PerformanceManager::instance()->measure(false);
   digitalWrite(LED_BUILTIN, HIGH);

@@ -10,6 +10,14 @@
         "vector": "cpp",
         "string_view": "cpp",
         "initializer_list": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "new": "cpp",
+        "memory": "cpp",
+        "istream": "cpp",
+        "functional": "cpp",
+        "optional": "cpp",
+        "algorithm": "cpp",
+        "limits": "cpp",
+        "streambuf": "cpp"
     }
 }

@@ -13,14 +13,10 @@ unsigned long PerformanceManager::getElapsedTime() const {
 
 void PerformanceManager::measure(bool shouldDelay, bool debug) {
   this->elapsedMs = millis() - this->startMs;
-  if (this->elapsedMs) {
+  if (this->elapsedMs && debug)
     Serial.printf("Performance: %lu Hz ~ %lu ms (%lu ms)\n", 1000 / this->elapsedMs, this->elapsedMs, this->targetMs);
-  }
-  if (this->targetMs > this->elapsedMs) {
+  if (this->targetMs > this->elapsedMs)
     delay(this->targetMs - this->elapsedMs + 1000);
-  } else {
-    delay(1000);
-  }
 }
 
 void PerformanceManager::reset() {

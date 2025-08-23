@@ -1,23 +1,31 @@
+#include <hal/gpio_types.h>
+
 #include <Arduino.h>
 
 #include <PedalManager.hpp>
+#include <PedalValues.hpp>
 #include <PerformanceManager.hpp>
 
-// VL53L0X/TOF0200C @ 33Hz
-PedalManager pedals(D5);
+#define DEBUG true
 
-void loop();
-void setup();
+/**************************************
+ * VIN    GND   SDA   SCL   XAS   SHUT
+ *  ^      ^     ^     ^           ^
+ * 3V3    GND   D21   D22         D25
+ *************************************/
+
+gpio_num_t pedalPins[1] = {GPIO_NUM_25};
+PedalManager pedals(pedalPins, 1U);
 
 void loop() {
-  digitalWrite(LED_BUILTIN, LOW);
-  PerformanceManager::instance()->reset();
+    digitalWrite(LED_BUILTIN, LOW);
+    PerformanceManager::instance()->reset();
 
-  pedals.update(false);
-  Serial.printf("SensorA: %d %% - %d mm\n", pedals.getPedalPosition(0), pedals.getPedalDistance(0));
+    pedals.update(DEBUG);
+    PedalValues pedalA = pedals.getPedal(0U)->getValues();
 
-  digitalWrite(LED_BUILTIN, HIGH);
-  PerformanceManager::instance()->measure();
+    digitalWrite(LED_BUILTIN, HIGH);
+    PerformanceManager::instance()->measure(true, false);
 }
 
 void setup() {
@@ -32,8 +40,6 @@ void setup() {
 
   pedals.setup();
 
-  delay(1000);
-
-  PerformanceManager::instance()->measure(false);
+  PerformanceManager::instance()->measure(false, true);
   digitalWrite(LED_BUILTIN, HIGH);
 }

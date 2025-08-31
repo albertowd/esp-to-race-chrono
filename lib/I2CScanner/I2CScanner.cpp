@@ -3,7 +3,7 @@
 
 #include "I2CScanner.hpp"
 
-void i2CScan() {
+void I2CScanner::probe() {
   byte error, address;
   int nDevices;
  

@@ -16,7 +16,7 @@ void PerformanceManager::measure(bool shouldDelay, bool debug) {
   if (this->elapsedMs && debug)
     Serial.printf("Performance: %lu Hz ~ %lu ms (%lu ms)\n", 1000 / this->elapsedMs, this->elapsedMs, this->targetMs);
   if (this->targetMs > this->elapsedMs)
-    delay(this->targetMs - this->elapsedMs + 1000);
+    delay(this->targetMs - this->elapsedMs);
 }
 
 void PerformanceManager::reset() {

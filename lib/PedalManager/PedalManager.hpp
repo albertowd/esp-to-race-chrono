@@ -10,7 +10,7 @@
 /**
  * First I2C address used by the Pedal Manager sensors.
  */
-#define PEDAL_MANAGER_MIN_I2C_ADDRESS (uint8_t)41U
+#define PEDAL_MANAGER_MIN_I2C_ADDRESS (uint8_t)42U
 #endif
 
 #ifndef PEDAL_MANAGER_MAX_PEDALS

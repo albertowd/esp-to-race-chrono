@@ -3,9 +3,10 @@
 
 PedalManager::PedalManager(const gpio_num_t *shutPins, const uint8_t pinCount)
 {
-  memset(this->pedals, 0, PEDAL_MANAGER_MIN_I2C_ADDRESS);
-  for (uint8_t pinIndex(0U); pinIndex < min(pinCount, PEDAL_MANAGER_MIN_I2C_ADDRESS); pinIndex++)
+  memset(this->pedals, 0, PEDAL_MANAGER_MAX_PEDALS);
+  for (uint8_t pinIndex(0U); pinIndex < min(pinCount, PEDAL_MANAGER_MAX_PEDALS); pinIndex++) {
     this->pedals[pinIndex] = new VL53L0XPedal(PEDAL_MANAGER_MIN_I2C_ADDRESS + pinIndex, shutPins[pinIndex]);
+  }
 }
 
 PedalManager::~PedalManager()
@@ -36,6 +37,7 @@ void PedalManager::setup() const
 void PedalManager::update(const bool debug)
 {
   for (uint8_t pedalIndex(0U); pedalIndex < PEDAL_MANAGER_MAX_PEDALS; pedalIndex++)
-    if (this->pedals[pedalIndex])
+    if (this->pedals[pedalIndex]) {
       this->pedals[pedalIndex]->measure(debug);
+    }
 }

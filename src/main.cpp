@@ -7,6 +7,7 @@
 #include <PerformanceManager.hpp>
 
 #define DEBUG true
+#define MAIN_LED GPIO_NUM_16
 
 /**************************************
  * VIN    GND   SDA   SCL   XAS   SHUT
@@ -14,32 +15,41 @@
  * 3V3    GND   D21   D22         D25
  *************************************/
 
-gpio_num_t pedalPins[1] = {GPIO_NUM_25};
-PedalManager pedals(pedalPins, 1U);
+gpio_num_t pedalPins[3] = {GPIO_NUM_25, GPIO_NUM_26, GPIO_NUM_27};
+//gpio_num_t pedalPins[2] = {GPIO_NUM_25, GPIO_NUM_26};
+//gpio_num_t pedalPins[1] = {GPIO_NUM_25};
+PedalManager pedals(pedalPins, 3U);
 
-void loop() {
-    digitalWrite(LED_BUILTIN, LOW);
-    PerformanceManager::instance()->reset();
 
-    pedals.update(DEBUG);
-    PedalValues pedalA = pedals.getPedal(0U)->getValues();
+void loop()
+{
+  digitalWrite(MAIN_LED, LOW);
+  PerformanceManager::instance()->reset();
 
-    digitalWrite(LED_BUILTIN, HIGH);
-    PerformanceManager::instance()->measure(true, false);
+  pedals.update(DEBUG);
+
+  digitalWrite(MAIN_LED, HIGH);
+  PerformanceManager::instance()->measure(true, true);
 }
 
-void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW);
+void setup()
+{
+  pinMode(MAIN_LED, OUTPUT);
+  digitalWrite(MAIN_LED, LOW);
+
   PerformanceManager::instance()->reset();
 
   Serial.begin(115200);
   // Wait for 1 second to a USB instance
   unsigned long serialTimeout = millis() + 1000;
-  while (!Serial && serialTimeout > millis()) { delay(1); }
+  while (!Serial && serialTimeout > millis())
+  {
+    delay(1);
+  }
+  Serial.println("Initializing ESP To Race Chrono...");
 
   pedals.setup();
 
   PerformanceManager::instance()->measure(false, true);
-  digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(MAIN_LED, HIGH);
 }

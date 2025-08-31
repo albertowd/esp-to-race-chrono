@@ -12,10 +12,12 @@ VL53L0XPedal::~VL53L0XPedal() {
 }
 
 void VL53L0XPedal::configure(const bool debug) {
+  Serial.printf("Configuring pedal %X\n", this->i2CAddress);
   digitalWrite(this->shutPin, HIGH);
+  delay(500);
   if (!this->sensor.begin(this->i2CAddress, debug, &Wire, Adafruit_VL53L0X::VL53L0X_Sense_config_t::VL53L0X_SENSE_HIGH_SPEED))
     Serial.printf("Error initializing VL53L0X sensor on I2C address %d \n", this->i2CAddress);
-  delay(10);
+  delay(500);
 }
 
 void VL53L0XPedal::measure(const bool debug)
@@ -29,18 +31,24 @@ void VL53L0XPedal::measure(const bool debug)
       this->values.percValue = (this->values.currentValue - this->values.minValue) * 100U / (this->values.maxValue - this->values.minValue);
     
     if (debug)
-      Serial.printf("Pedal value: %umm (min: %u max: %u) %u%\n", this->values.currentValue, this->values.minValue, this->values.maxValue, this->values.percValue);
+      Serial.printf("Pedal %X value: %umm (min: %u max: %u) %u%%\n", this->i2CAddress, this->values.currentValue, this->values.minValue, this->values.maxValue, this->values.percValue);
   }
 }
 
 void VL53L0XPedal::start(const bool debug)
 {
-  this->configure(debug);
-  this->sensor.startRangeContinuous(30U);
+  if (!this->ranging) {
+    this->configure(debug);
+    this->sensor.startRangeContinuous(30U);
+    this->ranging = true;
+  }
 }
 
 void VL53L0XPedal::stop()
 {
-  this->sensor.stopRangeContinuous();
-  digitalWrite(this->shutPin, LOW);
+  if (this->ranging) {
+    this->ranging = false;
+    this->sensor.stopRangeContinuous();
+    digitalWrite(this->shutPin, LOW);
+  }
 }

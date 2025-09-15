@@ -26,7 +26,7 @@ void BatteryHolder::Monitor::update(bool debug)
   // Convert ADC value to voltage (adjust these values based on your board and battery)
   // This is a simplified conversion, you may need a more complex calculation
   // or voltage divider to get an accurate battery voltage reading.
-  this->lastVoltage = this->lastValue * (5.0 / 4095.0); // For ESP32, 4095 is the max ADC value
+  this->lastVoltage = this->lastValue * BATTERY_MULTIPLIER / BATTERY_MAX_VALUE * BATTERY_VOLTAGE;
 
   if (debug)
   {

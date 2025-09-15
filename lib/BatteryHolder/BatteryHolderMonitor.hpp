@@ -6,6 +6,9 @@
 namespace BatteryHolder
 {
 #define BATTERY_HOLDER_PIN (uint8_t)3U
+#define BATTERY_MAX_VALUE 4096U
+#define BATTERY_VOLTAGE 3.7f
+#define BATTERY_MULTIPLIER 2.0f
 
   class Monitor
   {

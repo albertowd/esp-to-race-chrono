@@ -16,12 +16,15 @@ void loop()
 
 void setup()
 {
-  Serial.begin(115200);
-  // Wait for 1 second to a USB instance
-  unsigned long serialTimeout = millis() + 1000;
-  while (!Serial && serialTimeout > millis())
+  if (DEBUG)
   {
-    delay(1);
+    Serial.begin(115200);
+    // Wait for 1 second to a USB instance
+    unsigned long serialTimeout = millis() + 1000;
+    while (!Serial && serialTimeout > millis())
+    {
+      delay(1);
+    }
   }
   batteryMon.setup();
 }

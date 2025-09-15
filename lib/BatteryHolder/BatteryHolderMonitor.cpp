@@ -2,7 +2,7 @@
 
 #include "BatteryHolderMonitor.hpp"
 
-BatteryHolder::Monitor::Monitor(uint8_t batteryPin) : batteryPin(batteryPin), lastValue(0U), lastVoltage(0.0f) {}
+BatteryHolder::Monitor::Monitor(uint8_t batteryPin) : batteryPin(batteryPin), lastPerc(0U), lastValue(0U), lastVoltage(0.0f) {}
 
 float BatteryHolder::Monitor::getVoltage() const
 {
@@ -14,6 +14,11 @@ uint16_t BatteryHolder::Monitor::getValue() const
   return this->lastValue;
 }
 
+uint8_t BatteryHolder::Monitor::getPerc() const
+{
+  return this->lastPerc;
+}
+
 void BatteryHolder::Monitor::setup() const
 {
   pinMode(this->batteryPin, INPUT);
@@ -22,11 +27,12 @@ void BatteryHolder::Monitor::setup() const
 void BatteryHolder::Monitor::update(bool debug)
 {
   this->lastValue = analogRead(this->batteryPin);
-
-  // Convert ADC value to voltage (adjust these values based on your board and battery)
-  // This is a simplified conversion, you may need a more complex calculation
-  // or voltage divider to get an accurate battery voltage reading.
   this->lastVoltage = this->lastValue * BATTERY_MULTIPLIER / BATTERY_MAX_VALUE * BATTERY_VOLTAGE;
+
+  float maxVal = BATTERY_VOLTAGE + 0.5f;
+  float minVal = BATTERY_VOLTAGE - 1.0f;
+  uint8_t perc = (uint16_t)((this->lastVoltage - minVal) / (maxVal - minVal) * 100U);
+  this->lastPerc = min(max((uint8_t)0U, perc), (uint8_t)100U);
 
   if (debug)
   {
@@ -34,6 +40,9 @@ void BatteryHolder::Monitor::update(bool debug)
     Serial.print(this->lastValue);
     Serial.print(" | Battery Voltage: ");
     Serial.print(this->lastVoltage);
-    Serial.println(" V");
+    Serial.print(" V");
+    Serial.print(" | ");
+    Serial.print(this->lastPerc);
+    Serial.println(" %");
   }
 }

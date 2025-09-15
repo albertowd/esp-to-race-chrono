@@ -16,12 +16,15 @@ namespace BatteryHolder
     float lastVoltage;
     uint16_t lastValue;
     uint8_t batteryPin;
+    uint8_t lastPerc;
 
   public:
     Monitor(uint8_t batteryPin = BATTERY_HOLDER_PIN);
 
     float getVoltage() const;
     uint16_t getValue() const;
+    uint8_t getPerc() const;
+
     void setup() const;
     void update(bool debug = false);
   };
